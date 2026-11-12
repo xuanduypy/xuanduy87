@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Huỳnh Xuân Duy - Tâm Sự Đời Tôi</title>
+  
+  <!-- Google Fonts: Inter and Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    html, body {
+      height: 100dvh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: #020617;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Active Navigation Style (Duy V1 Indigo Accent) */
+    .active-nav {
+      color: #818cf8 !important;
+      background-color: rgba(79, 70, 229, 0.18);
+      border-color: rgba(99, 102, 241, 0.35);
+      font-weight: 700;
+      box-shadow: 0 0 20px rgba(79, 70, 229, 0.2);
+    }
+
+    /* === PENCIL SKETCH ARTISTIC BACKGROUND & PAPER GRAIN === */
+    .pencil-paper-texture {
+      background-image: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 0),
+                        radial-gradient(rgba(99, 102, 241, 0.08) 1px, transparent 0);
+      background-size: 28px 28px, 14px 14px;
+      background-position: 0 0, 7px 7px;
+    }
+
+    .pencil-sketch-layer {
+      transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+      will-change: transform;
+    }
+
+    /* === SINGLE-PAGE FULL-VIEWPORT SLIDE ENGINE === */
+    .page-slide {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(45px) scale(0.97);
+      filter: blur(8px);
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+                  filter 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                  visibility 0.75s;
+      z-index: 10;
+    }
+
+    .page-slide.is-prev {
+      transform: translateY(-45px) scale(0.97);
+    }
+
+    .page-slide.is-active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+      z-index: 20;
+    }
+
+    /* Nội dung bên trong mỗi slide tự cuộn mượt nếu màn hình nhỏ */
+    .slide-scroll-area {
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .slide-scroll-area::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* === STAGGERED ENTRANCE ANIMATIONS === */
+    .anim-item {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .page-slide.is-active .anim-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-1 { transition-delay: 0.10s; }
+    .delay-2 { transition-delay: 0.20s; }
+    .delay-3 { transition-delay: 0.30s; }
+    .delay-4 { transition-delay: 0.40s; }
+    .delay-5 { transition-delay: 0.50s; }
+
+    /* === BẢO VỆ CƠ BẢN: CHỐNG BÔI ĐEN NỘI DUNG === */
+    body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    input, textarea, [contenteditable="true"] {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+  </style>
+</head>
+<body class="relative bg-slate-950 text-slate-300 font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
+
+  <!-- NỀN NGHỆ THUẬT TRANH VẼ BẰNG BÚT CHÌ + DARK GLASS -->
+  <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/60 via-slate-950 to-slate-950"></div>
+    <div class="absolute inset-0 pencil-paper-texture opacity-65"></div>
+
+    <!-- Bức tranh phác họa nét chì (Núi Biển Phú Yên & Sông Nước Tiền Giang) -->
+    <div class="pencil-sketch-layer absolute inset-0 flex items-center justify-center opacity-40" id="pencil-bg-art">
+      <svg class="w-full h-full object-cover" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="graphite-stroke" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence baseFrequency="0.04" numOctaves="3" result="noise" type="fractalNoise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <pattern height="10" id="pencil-hatch" patternTransform="rotate(35)" patternUnits="userSpaceOnUse" width="10">
+            <line stroke="#94a3b8" stroke-opacity="0.32" stroke-width="0.75" x1="0" x2="0" y1="0" y2="10"/>
+            <line stroke="#64748b" stroke-opacity="0.22" stroke-width="0.5" x1="5" x2="5" y1="0" y2="10"/>
+          </pattern>
+          <pattern height="8" id="pencil-cross-hatch" patternTransform="rotate(-30)" patternUnits="userSpaceOnUse" width="8">
+            <line stroke="#94a3b8" stroke-opacity="0.25" stroke-width="0.65" x1="0" x2="0" y1="0" y2="8"/>
+          </pattern>
+        </defs>
+
+        <g filter="url(#graphite-stroke)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="1120" cy="210" r="92" stroke="#cbd5e1" stroke-dasharray="18 4 35 3" stroke-opacity="0.4" stroke-width="1.3"/>
+          <circle cx="1122" cy="208" r="86" stroke="#94a3b8" stroke-dasharray="28 6 12 4" stroke-opacity="0.3" stroke-width="0.9"/>
+          <circle cx="1118" cy="212" fill="url(#pencil-hatch)" r="82" stroke="none"/>
+
+          <path d="M-40 540 Q 160 360, 360 460 T 760 410 T 1150 450 T 1490 380 L 1490 620 L -40 620 Z" fill="url(#pencil-hatch)" stroke="#cbd5e1" stroke-opacity="0.45" stroke-width="1.6"/>
+          <path d="M-40 545 Q 165 365, 365 465 T 765 415 T 1155 455 T 1490 385" stroke="#94a3b8" stroke-dasharray="40 5 15 3" stroke-opacity="0.35" stroke-width="1"/>
+
+          <path d="M-50 610 C 180 500, 420 530, 680 590 C 950 650, 1220 510, 1490 570 L 1490 720 L -50 720 Z" fill="url(#pencil-cross-hatch)" stroke="#cbd5e1" stroke-opacity="0.5" stroke-width="1.7"/>
+
+          <g stroke="#94a3b8" stroke-opacity="0.36" stroke-width="1">
+            <line x1="210" x2="185" y1="430" y2="510"/>
+            <line x1="225" x2="198" y1="435" y2="518"/>
+            <line x1="240" x2="215" y1="442" y2="520"/>
+            <line x1="740" x2="710" y1="425" y2="530"/>
+            <line x1="758" x2="725" y1="422" y2="535"/>
+            <line x1="775" x2="745" y1="428" y2="532"/>
+            <line x1="1140" x2="1105" y1="458" y2="555"/>
+            <line x1="1158" x2="1125" y1="462" y2="560"/>
+          </g>
+
+          <path d="M-20 690 Q 340 650, 720 695 T 1460 680" stroke="#cbd5e1" stroke-opacity="0.45" stroke-width="1.4"/>
+          <path d="M80 735 Q 460 705, 840 740 T 1420 725" stroke="#94a3b8" stroke-dasharray="60 12 25 8" stroke-opacity="0.38" stroke-width="1.2"/>
+          <path d="M-30 785 Q 390 755, 790 795 T 1480 780" stroke="#cbd5e1" stroke-dasharray="90 15 40 10" stroke-opacity="0.34" stroke-width="1.2"/>
+          <path d="M140 835 Q 540 810, 960 845 T 1440 830" stroke="#94a3b8" stroke-dasharray="50 18" stroke-opacity="0.28" stroke-width="1"/>
+
+          <path d="M510 676 Q 545 688, 585 676 Q 548 682, 510 676 Z" fill="#cbd5e1" fill-opacity="0.28" stroke="#e2e8f0" stroke-opacity="0.55" stroke-width="1.4"/>
+          <path d="M545 676 L 545 642 L 568 672 Z" stroke="#cbd5e1" stroke-opacity="0.5" stroke-width="1.2"/>
+
+          <path d="M330 250 Q 342 238, 352 248 Q 362 238, 374 250" stroke="#cbd5e1" stroke-opacity="0.5" stroke-width="1.4"/>
+          <path d="M390 225 Q 400 215, 408 223 Q 416 215, 426 225" stroke="#cbd5e1" stroke-opacity="0.42" stroke-width="1.2"/>
+          <path d="M285 280 Q 294 272, 301 278 Q 308 272, 317 280" stroke="#94a3b8" stroke-opacity="0.38" stroke-width="1"/>
+
+          <line stroke="#64748b" stroke-opacity="0.25" stroke-width="0.9" x1="36" x2="1404" y1="32" y2="32"/>
+          <line stroke="#64748b" stroke-opacity="0.25" stroke-width="0.9" x1="36" x2="1404" y1="868" y2="868"/>
+          <line stroke="#64748b" stroke-opacity="0.25" stroke-width="0.9" x1="44" x2="44" y1="24" y2="876"/>
+          <line stroke="#64748b" stroke-opacity="0.25" stroke-width="0.9" x1="1396" x2="1396" y1="24" y2="876"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="absolute -top-24 right-0 w-[42vw] h-[42vw] rounded-full bg-indigo-600/10 blur-[130px]"></div>
+    <div class="absolute bottom-0 -left-24 w-[42vw] h-[42vw] rounded-full bg-indigo-500/10 blur-[130px]"></div>
+  </div>
+
+  <!-- TOPBAR / HEADER CỐ ĐỊNH -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-slate-900/55 backdrop-blur-xl border-b border-slate-800/80 shadow-xl transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <button class="nav-trigger flex items-center space-x-2.5 py-2 group cursor-pointer focus:outline-none" data-slide="0">
+        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-lg shadow-indigo-500/60 group-hover:scale-125 transition-transform"></span>
+        <span class="font-display font-bold text-sm tracking-widest text-slate-100 uppercase">
+          HUỲNH XUÂN DUY
+        </span>
+      </button>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-2 lg:space-x-3">
+        <button class="nav-link nav-trigger active-nav font-display font-bold text-xs tracking-widest text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 border border-transparent rounded-xl px-3 py-2 transition-all duration-300 uppercase cursor-pointer" data-slide="0">TRANG CHỦ</button>
+        <button class="nav-link nav-trigger font-display font-bold text-xs tracking-widest text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 border border-transparent rounded-xl px-3 py-2 transition-all duration-300 uppercase cursor-pointer" data-slide="1">CHUYỆN ĐỜI &amp; TÂM NIỆM</button>
+        <button class="nav-link nav-trigger font-display font-bold text-xs tracking-widest text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 border border-transparent rounded-xl px-3 py-2 transition-all duration-300 uppercase cursor-pointer" data-slide="2">HÀNH TRÌNH KHÁM PHÁ</button>
+        <button class="nav-link nav-trigger font-display font-bold text-xs tracking-widest text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 border border-transparent rounded-xl px-3 py-2 transition-all duration-300 uppercase cursor-pointer" data-slide="3">TRẢI NGHIỆM ĐÚC KẾT</button>
+        <button class="nav-link nav-trigger font-display font-bold text-xs tracking-widest text-slate-400 hover:text-slate-100 hover:bg-slate-800/50 border border-transparent rounded-xl px-3 py-2 transition-all duration-300 uppercase cursor-pointer" data-slide="4">TÒ MÒ THÊM NỮA</button>
+      </nav>
+
+      <!-- Slide Counter Pill (Desktop) -->
+      <div class="hidden lg:flex items-center space-x-2">
+        <span class="px-3 py-1.5 rounded-xl bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 font-mono text-[11px] font-semibold tracking-wider">
+          <span id="slide-current-num">01</span> / 05
+        </span>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="flex md:hidden items-center">
+        <button class="p-2.5 rounded-xl bg-slate-900/80 text-slate-200 border border-slate-800 hover:border-indigo-500/40 cursor-pointer focus:outline-none transition-colors" id="mobile-menu-btn">
+          <i class="w-5 h-5" data-lucide="align-justify" id="mobile-menu-icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="hidden md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/80 py-3 shadow-2xl" id="mobile-menu">
+      <div class="px-4 flex flex-col space-y-1.5">
+        <button class="mobile-nav-link nav-trigger text-left font-display font-bold text-xs tracking-wider py-2.5 px-3 rounded-xl uppercase text-slate-300 hover:text-indigo-400 hover:bg-slate-800/60 transition-colors" data-slide="0">01. TRANG CHỦ</button>
+        <button class="mobile-nav-link nav-trigger text-left font-display font-bold text-xs tracking-wider py-2.5 px-3 rounded-xl uppercase text-slate-300 hover:text-indigo-400 hover:bg-slate-800/60 transition-colors" data-slide="1">02. CHUYỆN ĐỜI &amp; TÂM NIỆM</button>
+        <button class="mobile-nav-link nav-trigger text-left font-display font-bold text-xs tracking-wider py-2.5 px-3 rounded-xl uppercase text-slate-300 hover:text-indigo-400 hover:bg-slate-800/60 transition-colors" data-slide="2">03. HÀNH TRÌNH KHÁM PHÁ</button>
+        <button class="mobile-nav-link nav-trigger text-left font-display font-bold text-xs tracking-wider py-2.5 px-3 rounded-xl uppercase text-slate-300 hover:text-indigo-400 hover:bg-slate-800/60 transition-colors" data-slide="3">04. TRẢI NGHIỆM ĐÚC KẾT</button>
+        <button class="mobile-nav-link nav-trigger text-left font-display font-bold text-xs tracking-wider py-2.5 px-3 rounded-xl uppercase text-slate-300 hover:text-indigo-400 hover:bg-slate-800/60 transition-colors" data-slide="4">05. TÒ MÒ THÊM NỮA</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- THANH ĐIỀU HƯỚNG CHẤM TRÒN BÊN PHẢI -->
+  <div class="fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-40 hidden sm:flex flex-col items-center space-y-3">
+    <button aria-label="Trang chủ" class="dot-indicator nav-trigger w-2.5 h-8 rounded-full bg-indigo-500 shadow-lg shadow-indigo-500/50 transition-all duration-300 cursor-pointer" data-slide="0"></button>
+    <button aria-label="Chuyện đời" class="dot-indicator nav-trigger w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-indigo-400 transition-all duration-300 cursor-pointer" data-slide="1"></button>
+    <button aria-label="Hành trình" class="dot-indicator nav-trigger w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-indigo-400 transition-all duration-300 cursor-pointer" data-slide="2"></button>
+    <button aria-label="Đúc kết" class="dot-indicator nav-trigger w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-indigo-400 transition-all duration-300 cursor-pointer" data-slide="3"></button>
+    <button aria-label="Tò mò thêm" class="dot-indicator nav-trigger w-2.5 h-2.5 rounded-full bg-slate-700 hover:bg-indigo-400 transition-all duration-300 cursor-pointer" data-slide="4"></button>
+  </div>
+
+  <!-- KHUNG CHỨA 5 SLIDE TRÊN 1 TRANG DUY NHẤT -->
+  <main class="relative w-full h-full">
+
+    <!-- SLIDE 0: HERO SECTION -->
+    <section class="page-slide is-active" data-index="0" id="hero">
+      <div class="slide-scroll-area flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        <div class="max-w-4xl mx-auto w-full my-auto">
+          <div class="text-center max-w-3xl mx-auto">
+            <div class="anim-item delay-1 inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900/60 border border-slate-800/80 mb-4 backdrop-blur-md">
+              <i class="w-3.5 h-3.5 text-indigo-400" data-lucide="feather"></i>
+              <span class="font-mono text-[10px] text-slate-300 uppercase tracking-widest">NHẬT KÝ TÂM NIỆM &amp; HÀNH TRÌNH</span>
+            </div>
+
+            <h1 class="anim-item delay-2 font-display font-bold text-4xl sm:text-5xl md:text-6xl text-slate-100 tracking-wide leading-none uppercase select-none drop-shadow-sm">
+              HUỲNH XUÂN DUY
+            </h1>
+
+            <div class="anim-item delay-3 mt-6 flex flex-wrap justify-center gap-3">
+              <div class="inline-flex items-center bg-indigo-600/20 backdrop-blur-md border border-indigo-500/35 px-4 sm:px-6 py-2.5 rounded-2xl shadow-lg shadow-indigo-600/15 max-w-full">
+                <span class="font-display font-bold text-xs sm:text-sm md:text-base text-indigo-300 tracking-widest uppercase whitespace-nowrap">
+                  ĐƯỢC SINH RA ĐÃ LÀ 1 MAY MẮN
+                </span>
+              </div>
+              
+              <div class="inline-flex items-center bg-rose-500/15 backdrop-blur-md border border-rose-500/35 px-4 sm:px-6 py-2.5 rounded-2xl shadow-lg shadow-rose-500/10 max-w-full">
+                <span class="font-display font-bold text-xs sm:text-sm md:text-base text-rose-400 tracking-widest uppercase whitespace-nowrap">
+                  HÃY SỐNG THẬT HẠNH PHÚC
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="anim-item delay-4 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-5 sm:p-6 md:p-8 shadow-2xl max-w-2xl mx-auto w-full mt-7">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-left">
+              <div class="space-y-2.5 sm:space-y-3">
+                <div class="flex items-center space-x-3 p-3 bg-slate-950/55 rounded-2xl border border-slate-800/80 hover:border-indigo-500/45 hover:bg-slate-900/80 transition-all duration-200 group">
+                  <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-colors">
+                    <i class="w-3.5 h-3.5" data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="font-display font-bold text-[11px] sm:text-xs text-slate-200 uppercase tracking-widest group-hover:text-white transition-colors">
+                    SỐNG TRÁCH NHIỆM
+                  </span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-slate-950/55 rounded-2xl border border-slate-800/80 hover:border-indigo-500/45 hover:bg-slate-900/80 transition-all duration-200 group">
+                  <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-colors">
+                    <i class="w-3.5 h-3.5" data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="font-display font-bold text-[11px] sm:text-xs text-slate-200 uppercase tracking-widest group-hover:text-white transition-colors">
+                    CỐNG HIẾN ĐIỀU TỐT ĐẸP
+                  </span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-slate-950/55 rounded-2xl border border-slate-800/80 hover:border-indigo-500/45 hover:bg-slate-900/80 transition-all duration-200 group">
+                  <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-colors">
+                    <i class="w-3.5 h-3.5" data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="font-display font-bold text-[11px] sm:text-xs text-slate-200 uppercase tracking-widest group-hover:text-white transition-colors">
+                    LÀM VIỆC HẾT SỨC
+                  </span>
+                </div>
+              </div>
+
+              <div class="space-y-2.5 sm:space-y-3">
+                <div class="flex items-center space-x-3 p-3 bg-slate-950/55 rounded-2xl border border-slate-800/80 hover:border-indigo-500/45 hover:bg-slate-900/80 transition-all duration-200 group">
+                  <div class="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-colors">
+                    <i class="w-3.5 h-3.5" data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="font-display font-bold text-[11px] sm:text-xs text-slate-200 uppercase tracking-widest group-hover:text-white transition-colors">
+                    CHƠI HẾT MÌNH
+                  </span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-slate-950/55 rounded-2xl border border-slate-800/80 hover:border-indigo-500/45 hover:bg-slate-900/80 transition-all duration-200 group">
+                  <div class="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-colors">
+                    <i class="w-3.5 h-3.5" data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="font-display font-bold text-[11px] sm:text-xs text-slate-200 uppercase tracking-widest group-hover:text-white transition-colors">
+                    YÊU CÁI ĐẸP
+                  </span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-slate-950/55 rounded-2xl border border-slate-800/80 hover:border-indigo-500/45 hover:bg-slate-900/80 transition-all duration-200 group">
+                  <div class="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/25 text-indigo-400 shrink-0 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-500 transition-colors">
+                    <i class="w-3.5 h-3.5" data-lucide="check-circle-2"></i>
+                  </div>
+                  <span class="font-display font-bold text-[11px] sm:text-xs text-slate-200 uppercase tracking-widest group-hover:text-white transition-colors">
+                    GIA ĐÌNH LÀ QUAN TRỌNG NHẤT
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="anim-item delay-5 mt-6 text-center">
+            <button class="nav-trigger inline-flex items-center space-x-2 text-slate-400 hover:text-indigo-300 transition-colors text-xs font-mono uppercase tracking-widest cursor-pointer" data-slide="1">
+              <span>LƯỚT CHUỘT ĐỂ KHÁM PHÁ</span>
+              <i class="w-4 h-4 animate-bounce text-indigo-400" data-lucide="chevrons-down"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 1: ABOUT SECTION -->
+    <section class="page-slide" data-index="1" id="about">
+      <div class="slide-scroll-area flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        <div class="max-w-7xl mx-auto w-full my-auto">
+          <div class="anim-item delay-1 text-center max-w-3xl mx-auto mb-10">
+            <span class="text-slate-400 text-xs font-medium uppercase tracking-widest block mb-2">02 / HỒ SƠ CÁ NHÂN</span>
+            <h2 class="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-slate-100 tracking-wide">
+              Chuyện Đời &amp; Tâm Niệm
+            </h2>
+            <div class="w-16 h-1 bg-gradient-to-r from-indigo-500 to-indigo-400 mx-auto mt-3 rounded-full shadow-lg shadow-indigo-500/40"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div class="anim-item delay-2 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl pt-6 pb-7 px-6 shadow-2xl hover:border-indigo-500/45 hover:bg-slate-900/65 transition-all duration-300">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="p-2.5 rounded-xl inline-flex shrink-0 text-indigo-400 bg-indigo-600/20 border border-indigo-500/30">
+                  <i class="w-4 h-4" data-lucide="user"></i>
+                </div>
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-100 tracking-wide leading-snug">
+                  Về Tôi
+                </h3>
+              </div>
+              <p class="font-sans text-[13px] sm:text-sm text-slate-300 leading-relaxed text-left">
+                Tôi là HUỲNH XUÂN DUY, được sinh ra và lớn lên trên mảnh đất PHÚ YÊN chứa chan nắng vàng, gió lộng và bãi cát trắng trải dài. Những ngày tháng ấu thơ rèn luyện cho tôi một ý chí bền vững, sự can trường kiên định để vươn lên trong cuộc sống.
+              </p>
+            </div>
+
+            <div class="anim-item delay-3 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl pt-6 pb-7 px-6 shadow-2xl hover:border-indigo-500/45 hover:bg-slate-900/65 transition-all duration-300">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="p-2.5 rounded-xl inline-flex shrink-0 text-emerald-400 bg-emerald-500/10 border border-emerald-500/25">
+                  <i class="w-4 h-4" data-lucide="compass"></i>
+                </div>
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-100 tracking-wide leading-snug">
+                  Chuyến Đi Cuộc Đời
+                </h3>
+              </div>
+              <p class="font-sans text-[13px] sm:text-sm text-slate-300 leading-relaxed text-left">
+                Sau khi tốt nghiệp Trường Đại học Xây dựng Miền Trung (MUCE), một chuyến đi định mệnh đầy thử thách xúc động đã thay đổi vĩnh viễn cuộc sống của Xuân Duy. Tôi rời quê hương yêu dấu, mang theo những hành trang hoài bão vững vàng để gầy dựng sự nghiệp tại quê hương thứ hai.
+              </p>
+            </div>
+
+            <div class="anim-item delay-4 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl pt-6 pb-7 px-6 shadow-2xl hover:border-indigo-500/45 hover:bg-slate-900/65 transition-all duration-300">
+              <div class="flex items-center space-x-3 mb-4">
+                <div class="p-2.5 rounded-xl inline-flex shrink-0 text-rose-400 bg-rose-500/10 border border-rose-500/25">
+                  <i class="w-4 h-4" data-lucide="heart"></i>
+                </div>
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-100 tracking-wide leading-snug">
+                  Điều Tâm Niệm
+                </h3>
+              </div>
+              <p class="font-sans text-[13px] sm:text-sm text-slate-300 leading-relaxed text-left">
+                Đi qua bao nhiêu sóng gió thăng trầm của tuổi trẻ, Duy nhận ra gia đình chính là điểm tựa thiêng liêng nhất, thầm lặng nhất ôm ấp lấy cuộc đời mình. Gia đình là nơi để ta trân trọng, yêu thương kính ngưỡng lẫn nhau ngay lúc này, đừng bao giờ trì hoãn.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: EXPLORE JOURNEY -->
+    <section class="page-slide" data-index="2" id="explore">
+      <div class="slide-scroll-area flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        <div class="max-w-4xl mx-auto w-full my-auto">
+          <div class="anim-item delay-1 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl pt-7 pb-9 px-6 sm:pt-9 sm:pb-10 sm:px-10 shadow-2xl">
+            <div class="space-y-6">
+              <div class="anim-item delay-2 space-y-2.5 text-left">
+                <span class="text-slate-400 text-xs font-medium uppercase tracking-widest block">03 / DẤU CHÂN KỶ NIỆM</span>
+                <h3 class="font-display font-bold text-2xl sm:text-3xl md:text-4xl text-slate-100 tracking-wide">
+                  Hành Trình Khám Phá
+                </h3>
+                <div class="items-center space-x-2 inline-flex bg-indigo-600/20 border border-indigo-500/30 px-3.5 py-1.5 rounded-full">
+                  <i class="w-3.5 h-3.5 text-indigo-400" data-lucide="map-pin"></i>
+                  <span class="font-mono text-[10px] text-indigo-300 font-bold uppercase tracking-wider">
+                    TỪ PHÚ YÊN ĐẾN MẢNH ĐẤT TIỀN GIANG YÊN BÌNH
+                  </span>
+                </div>
+              </div>
+              
+              <div class="anim-item delay-3 space-y-3 font-sans text-sm text-slate-300 leading-relaxed text-left">
+                <p>
+                  Sinh ra và lớn lên tại Phú Yên, một vùng quê yên bình và xinh đẹp với biển xanh cát trắng, nhưng hằng năm cũng phải đối mặt với nhiều cơn thịnh nộ bão lũ từ thiên nhiên khắc nghiệt. 
+                </p>
+                <p>
+                  Mặc dù dạt dào lòng yêu mến thiết tha với quê hương nguồn cội Phú Yên, nhưng cuộc sống lập thân lập nghiệp có những duyên nợ tuyệt vời bất ngờ. Duy đã đặt chân đến mảnh đất mới Tiền Giang - một vùng quê sông nước hiền hòa trù phú, nơi tràn ngập lòng hiếu khách chân thành, nồng ấm.
+                </p>
+              </div>
+
+              <div class="anim-item delay-4 bg-slate-950/60 p-6 rounded-2xl border border-slate-800/80 text-left">
+                <h4 class="font-display font-bold text-slate-100 text-sm uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <i class="w-4 h-4 text-indigo-400" data-lucide="sparkles"></i> TIỀN GIANG LÀ MẢNH ĐẤT MÀU MỠ VÀ YÊN BÌNH
+                </h4>
+                <div class="font-mono text-xs text-indigo-300 font-semibold space-y-2.5">
+                  <p class="flex items-center gap-2">- NƠI ĐÂY CÓ GIA ĐÌNH NHỎ CỦA TÔI.</p>
+                  <p class="flex items-center gap-2">- NƠI YÊN BÌNH VÀ TRÙ PHÚ.</p>
+                  <p class="flex items-center gap-2">- NƠI CÓ TÌNH YÊU</p>
+                </div>
+                <p class="mt-4 font-display font-bold text-slate-100 text-xs text-center uppercase tracking-wider border-t border-slate-800/80 pt-3.5">
+                  &#8220;CUỘC ĐỜI SẼ DẪN BẠN ĐẾN NƠI BẠN CẢM THẤY BÌNH YÊN&#8221;
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: LESSONS SECTION -->
+    <section class="page-slide" data-index="3" id="lessons">
+      <div class="slide-scroll-area flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+        <div class="max-w-7xl mx-auto w-full my-auto">
+          <div class="anim-item delay-1 text-center max-w-3xl mx-auto mb-10">
+            <span class="text-slate-400 text-xs font-medium uppercase tracking-widest block mb-2">04 / CHIÊM NGHIỆM SỐNG</span>
+            <h2 class="font-display font-bold text-3xl sm:text-4xl text-slate-100 tracking-wide">
+              Trải Nghiệm Đúc Kết
+            </h2>
+            <p class="font-sans text-sm text-slate-400 mt-2">
+              &#8220;Cuộc đời dẫu thăng dẫu trầm, điều đọng lại giá trị nhất là sự thấu hiểu.&#8221;
+            </p>
+            <div class="w-16 h-1 bg-gradient-to-r from-indigo-500 to-emerald-400 mx-auto mt-3 rounded-full shadow-lg shadow-indigo-500/40"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
+            
+            <div class="anim-item delay-2 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 relative overflow-hidden shadow-2xl hover:border-amber-500/35 hover:bg-slate-900/70 transition-all duration-300 flex flex-col justify-between min-h-[270px]">
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3.5 text-left">
+                  <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 shrink-0">
+                    <i class="w-5 h-5" data-lucide="history"></i>
+                  </div>
+                  <h3 class="font-display font-bold text-base sm:text-lg text-slate-100 leading-snug tracking-wide">
+                    NÔNG NỔI TUỔI TRẺ
+                  </h3>
+                </div>
+                <p class="font-sans text-xs text-slate-300 leading-relaxed italic border-l-2 border-amber-500/50 pl-3 text-left">
+                  &#8220;Giai đoạn của những năng lượng bộc phát hoang dã, khao khát nhưng thiếu đi sự định hình chín chắn.&#8221;
+                </p>
+              </div>
+              
+              <div class="pt-4 border-t border-slate-800/80 mt-4 space-y-2 text-left">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-amber-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">THIẾU PHÁN ĐOÁN</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-amber-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">GIAO TIẾP KÉM</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-amber-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">THIẾU TỰ TIN</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-amber-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">KHÔNG TÍCH LŨY</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="anim-item delay-3 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 relative overflow-hidden shadow-2xl hover:border-rose-500/35 hover:bg-slate-900/70 transition-all duration-300 flex flex-col justify-between min-h-[270px]">
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3.5 text-left">
+                  <div class="p-2.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 shrink-0">
+                    <i class="w-5 h-5" data-lucide="heart"></i>
+                  </div>
+                  <h3 class="font-display font-bold text-base sm:text-lg text-slate-100 leading-snug tracking-wide">
+                    TÌNH YÊU &amp; HÔN NHÂN
+                  </h3>
+                </div>
+                <p class="font-sans text-xs text-slate-300 leading-relaxed italic border-l-2 border-rose-500/50 pl-3 text-left">
+                  &#8220;Sự thấu hiểu sâu sắc, đồng tâm hiệp lực để dựng xây tương lai.&#8221;
+                </p>
+              </div>
+              
+              <div class="pt-4 border-t border-slate-800/80 mt-4 space-y-2 text-left">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-rose-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">SAY MÊ VÀ NỒNG NHIỆT</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-rose-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">PHẢI THAY ĐỔI VÀ TRƯỞNG THÀNH</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-rose-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">NHỮNG SAI LẦM...</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-rose-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">VƯỢT QUA VÀ HẠNH PHÚC</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="anim-item delay-4 bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 relative overflow-hidden shadow-2xl hover:border-emerald-500/35 hover:bg-slate-900/70 transition-all duration-300 flex flex-col justify-between min-h-[270px]">
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3.5 text-left">
+                  <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                    <i class="w-5 h-5" data-lucide="coffee"></i>
+                  </div>
+                  <h3 class="font-display font-bold text-base sm:text-lg text-slate-100 leading-snug tracking-wide">
+                    TRƯỞNG THÀNH
+                  </h3>
+                </div>
+                <p class="font-sans text-xs text-slate-300 leading-relaxed italic border-l-2 border-emerald-500/50 pl-3 text-left">
+                  &#8220;Hiểu được vị trí của mình ở đâu, trân quý mọi sự may mắn kề bên.&#8221;
+                </p>
+              </div>
+              
+              <div class="pt-4 border-t border-slate-800/80 mt-4 space-y-2 text-left">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">HỌC CÁCH CHĂM SÓC</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">YÊU THƯƠNG BẢN THÂN</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">BIẾT LẮNG NGHE</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full shrink-0"></span>
+                  <span class="font-mono text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-wider">BIẾT QUAN TÂM</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: FAQ & COPYRIGHT -->
+    <section class="page-slide" data-index="4" id="faq">
+      <div class="slide-scroll-area flex flex-col justify-center items-center px-4 sm:px-6 pt-24 pb-20">
+        <div class="max-w-4xl mx-auto w-full my-auto">
+          <div class="anim-item delay-1 text-center max-w-2xl mx-auto mb-8">
+            <span class="text-slate-400 text-xs font-medium uppercase tracking-widest block mb-2">05 / GÓC CHIA SẺ</span>
+            <h2 class="font-display font-bold text-2xl sm:text-3xl text-slate-100 tracking-wide uppercase">
+              CÒN ĐIỀU GÌ BẠN CHƯA HIỂU VỀ TÔI
+            </h2>
+            <div class="w-16 h-1 bg-gradient-to-r from-indigo-500 to-indigo-400 mx-auto mt-3 rounded-full shadow-lg shadow-indigo-500/40"></div>
+          </div>
+
+          <div class="space-y-3.5 text-left">
+            
+            <!-- Accordion 1 -->
+            <div class="anim-item delay-2 faq-item bg-slate-900/45 backdrop-blur-xl border border-indigo-500/30 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300" data-faq-id="faq-1">
+              <button class="faq-trigger w-full flex items-center justify-between p-5 sm:p-6 tracking-wide focus:outline-none cursor-pointer hover:bg-slate-900/65 transition-colors">
+                <div class="flex items-start space-x-3 pr-4">
+                  <i class="w-5 h-5 shrink-0 mt-0.5 text-indigo-400" data-lucide="help-circle"></i>
+                  <span class="font-display font-bold text-sm sm:text-base text-slate-100 tracking-wide leading-relaxed text-left">
+                    TÔI CÓ PHẢI LÀ NGƯỜI ĐÁNG TIN CẬY?
+                  </span>
+                </div>
+                <div>
+                  <i class="faq-icon w-5 h-5 text-indigo-400 shrink-0" data-lucide="chevron-up"></i>
+                </div>
+              </button>
+              <div class="faq-content px-6 pb-5 pt-3 border-t border-slate-800/80 leading-relaxed font-sans text-xs sm:text-sm text-slate-300 space-y-2.5">
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">SẼ CHẲNG AI HIỂU CUỘC SỐNG CỦA BẠN CẢ, NGOẠI TRỪ BẠN</p>
+                </div>
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">LỜI KHUYÊN CHÍNH LÀ SỰ ĐÚC KẾT SỰ CẨN TRỌNG CỦA NGƯỜI KHÁC, NÓ DÀNH CHO BẠN, NHƯNG CÓ THỂ SẼ KHÔNG ĐÚNG TRONG PHÁN ĐOÁN LÚC BẠN CẦN.</p>
+                </div>
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">KINH NGHIỆM CUỘC SỐNG CHỈ LÀ SỰ VẤP NGÃ CỦA 1 AI ĐÓ, ĐỪNG LUÔN TIN VÀ CŨNG ĐỪNG PHỦ NHẬN.</p>
+                </div>
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">CUỘC SỐNG BẠN VẤT VẢ, NHƯNG ĐỪNG LUÔN THAN PHIỀN, VÌ CHẢ AI BIẾT NGÀY MAI NÓ SẼ THAY ĐỔI RA SAO CẢ.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accordion 2 -->
+            <div class="anim-item delay-3 faq-item bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300" data-faq-id="faq-2">
+              <button class="faq-trigger w-full flex items-center justify-between p-5 sm:p-6 tracking-wide focus:outline-none cursor-pointer hover:bg-slate-900/65 transition-colors">
+                <div class="flex items-start space-x-3 pr-4">
+                  <i class="w-5 h-5 shrink-0 mt-0.5 text-indigo-400" data-lucide="help-circle"></i>
+                  <span class="font-display font-bold text-sm sm:text-base text-slate-100 tracking-wide leading-relaxed text-left">
+                    TẠI SAO XUÂN DUY LỰA CHỌN MIỀN ĐẤT TIỀN GIANG ĐỂ LẬP NGHIỆP?
+                  </span>
+                </div>
+                <div>
+                  <i class="faq-icon w-5 h-5 text-indigo-400 shrink-0" data-lucide="chevron-down"></i>
+                </div>
+              </button>
+              <div class="faq-content hidden px-6 pb-5 pt-3 border-t border-slate-800/80 leading-relaxed font-sans text-xs sm:text-sm text-slate-300 space-y-2.5">
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">Mọi chuyến đi xa lập thân lập nghiệp buổi đầu đều khởi đầu từ những cơ duyên kỹ thuật chân thành.</p>
+                </div>
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">Tiền Giang không chỉ là mảnh đất kinh tế trù phú dào dạt sản vật mát lành của sông nước chín rồng, mà còn mang vẻ đẹp mộc mạc hiền hoà, tình người cực kỳ nồng hậu và mến khách.</p>
+                </div>
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">Mảnh đất hiền lành này đã dần trở thành điểm tựa bình yên vững vàng nhất để gieo mầm hạnh phúc.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accordion 3 -->
+            <div class="anim-item delay-4 faq-item bg-slate-900/45 backdrop-blur-xl border border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300" data-faq-id="faq-3">
+              <button class="faq-trigger w-full flex items-center justify-between p-5 sm:p-6 tracking-wide focus:outline-none cursor-pointer hover:bg-slate-900/65 transition-colors">
+                <div class="flex items-start space-x-3 pr-4">
+                  <i class="w-5 h-5 shrink-0 mt-0.5 text-indigo-400" data-lucide="help-circle"></i>
+                  <span class="font-display font-bold text-sm sm:text-base text-slate-100 tracking-wide leading-relaxed text-left">
+                    TRIẾT LÝ SỐNG MAY MẮN VÀ MỘC MẠC CỦA DUY LÀ GÌ?
+                  </span>
+                </div>
+                <div>
+                  <i class="faq-icon w-5 h-5 text-indigo-400 shrink-0" data-lucide="chevron-down"></i>
+                </div>
+              </button>
+              <div class="faq-content hidden px-6 pb-5 pt-3 border-t border-slate-800/80 leading-relaxed font-sans text-xs sm:text-sm text-slate-300 space-y-2.5">
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">Được sinh ra lành lặn trên cõi đời này dẫu ở bối cảnh nào cũng đã là một điều cực kỳ may mắn tuyệt vời.</p>
+                </div>
+                <div class="flex space-x-2.5">
+                  <i class="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-1" data-lucide="quote"></i>
+                  <p class="whitespace-pre-line text-left">Hạnh phúc thực tế không định vị bằng những hào nhoáng vật chất hư hao bên ngoài, mà nằm ở bình yên sâu thẳm tâm hồn, được sống trách nhiệm và cống hiến đầy đủ giá trị tốt đẹp cho xã hội.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="anim-item delay-5 mt-8 pt-5 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-400">
+            <p class="text-[11px] text-slate-400 text-center sm:text-left">
+              Bản quyền sở hữu trí tuệ thuộc về anh Huỳnh Xuân Duy &copy; 2010. Mọi quyền được bảo hộ.
+            </p>
+            <span class="px-3.5 py-1.5 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 text-[10px] uppercase tracking-wider font-bold inline-flex items-center gap-1.5 shadow-lg shadow-indigo-600/10 shrink-0">
+              <i class="w-3.5 h-3.5" data-lucide="shield-check"></i> BẢO MẬT BỞI HUỲNH GIA FAMILY
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ZALO WIDGET -->
+  <div class="fixed bottom-5 right-5 z-50" id="zalo-widget">
+    <span class="absolute inset-0 rounded-full bg-indigo-500/35 blur-md animate-pulse pointer-events-none"></span>
+    <a class="relative block bg-indigo-600 hover:bg-indigo-500 text-white shadow-xl shadow-indigo-600/30 transition-all duration-300 py-2.5 px-5 rounded-full font-mono text-[11px] font-bold uppercase tracking-widest active:scale-95 border border-indigo-400/30 hover:scale-105 cursor-pointer" href="https://zalo.me/0389389783" rel="noopener noreferrer" target="_blank">
+      CHAT ZALO
+    </a>
+  </div>
+
+  <!-- SCRIPTS: SINGLE-PAGE SMOOTH TRANSITIONS + PARALLAX + BASIC SECURITY -->
+  <script>
+    // CÔNG TẮC BẢO VỆ CƠ BẢN (Đổi thành false khi cần sửa web)
+    const ENABLE_BASIC_SECURITY = true;
+
+    if (ENABLE_BASIC_SECURITY) {
+      document.addEventListener('contextmenu', (e) => {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+        if (e.key === 'F12') e.preventDefault();
+        if ((e.ctrlKey || e.metaKey) && ['c', 'u', 's', 'p', 'a'].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+        }
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) {
+          e.preventDefault();
+        }
+      });
+    }
+
+    lucide.createIcons();
+
+    const slides = document.querySelectorAll('.page-slide');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const dotIndicators = document.querySelectorAll('.dot-indicator');
+    const slideTriggers = document.querySelectorAll('.nav-trigger');
+    const slideCurrentNum = document.getElementById('slide-current-num');
+    const pencilBgArt = document.getElementById('pencil-bg-art');
+
+    let currentSlide = 0;
+    let isTransitioning = false;
+    const totalSlides = slides.length;
+
+    function goToSlide(targetIndex) {
+      if (targetIndex < 0 || targetIndex >= totalSlides || targetIndex === currentSlide || isTransitioning) {
+        return;
+      }
+
+      isTransitioning = true;
+      currentSlide = targetIndex;
+
+      slides.forEach((slide, idx) => {
+        slide.classList.remove('is-active', 'is-prev');
+        if (idx === currentSlide) {
+          slide.classList.add('is-active');
+          const scrollArea = slide.querySelector('.slide-scroll-area');
+          if (scrollArea) scrollArea.scrollTop = 0;
+        } else if (idx < currentSlide) {
+          slide.classList.add('is-prev');
+        }
+      });
+
+      if (pencilBgArt) {
+        const offsetY = currentSlide * -18;
+        const scaleVal = 1 + (currentSlide * 0.025);
+        pencilBgArt.style.transform = `translateY(${offsetY}px) scale(${scaleVal})`;
+      }
+
+      navLinks.forEach((link) => {
+        link.classList.remove('active-nav');
+        if (parseInt(link.getAttribute('data-slide'), 10) === currentSlide) {
+          link.classList.add('active-nav');
+        }
+      });
+
+      dotIndicators.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.classList.remove('h-2.5', 'bg-slate-700');
+          dot.classList.add('h-8', 'bg-indigo-500', 'shadow-lg', 'shadow-indigo-500/50');
+        } else {
+          dot.classList.remove('h-8', 'bg-indigo-500', 'shadow-lg', 'shadow-indigo-500/50');
+          dot.classList.add('h-2.5', 'bg-slate-700');
+        }
+      });
+
+      if (slideCurrentNum) {
+        slideCurrentNum.textContent = String(currentSlide + 1).padStart(2, '0');
+      }
+
+      setTimeout(() => {
+        isTransitioning = false;
+      }, 800);
+    }
+
+    slideTriggers.forEach((trigger) => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = parseInt(trigger.getAttribute('data-slide'), 10);
+        if (!isNaN(target)) {
+          goToSlide(target);
+        }
+      });
+    });
+
+    window.addEventListener('wheel', (e) => {
+      if (isTransitioning) return;
+
+      const activeScrollArea = slides[currentSlide].querySelector('.slide-scroll-area');
+      const isScrollable = activeScrollArea.scrollHeight > activeScrollArea.clientHeight + 5;
+
+      if (isScrollable) {
+        const atTop = activeScrollArea.scrollTop <= 2;
+        const atBottom = activeScrollArea.scrollTop + activeScrollArea.clientHeight >= activeScrollArea.scrollHeight - 2;
+        if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) {
+          return;
+        }
+      }
+
+      if (Math.abs(e.deltaY) > 25) {
+        if (e.deltaY > 0) {
+          goToSlide(currentSlide + 1);
+        } else {
+          goToSlide(currentSlide - 1);
+        }
+      }
+    }, { passive: true });
+
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (isTransitioning) return;
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+
+      const activeScrollArea = slides[currentSlide].querySelector('.slide-scroll-area');
+      const isScrollable = activeScrollArea.scrollHeight > activeScrollArea.clientHeight + 5;
+
+      if (isScrollable) {
+        const atTop = activeScrollArea.scrollTop <= 2;
+        const atBottom = activeScrollArea.scrollTop + activeScrollArea.clientHeight >= activeScrollArea.scrollHeight - 2;
+        if ((deltaY > 0 && !atBottom) || (deltaY < 0 && !atTop)) {
+          return;
+        }
+      }
+
+      if (Math.abs(deltaY) > 50) {
+        if (deltaY > 0) {
+          goToSlide(currentSlide + 1);
+        } else {
+          goToSlide(currentSlide - 1);
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'PageDown'].includes(e.key)) {
+        goToSlide(currentSlide + 1);
+      } else if (['ArrowUp', 'PageUp'].includes(e.key)) {
+        goToSlide(currentSlide - 1);
+      }
+    });
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenuIcon.setAttribute('data-lucide', 'x');
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenuIcon.setAttribute('data-lucide', 'align-justify');
+      }
+      lucide.createIcons();
+    });
+
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileMenuIcon.setAttribute('data-lucide', 'align-justify');
+        lucide.createIcons();
+      });
+    });
+
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const trigger = item.querySelector('.faq-trigger');
+      const content = item.querySelector('.faq-content');
+      const icon = item.querySelector('.faq-icon');
+
+      trigger.addEventListener('click', () => {
+        const isOpen = !content.classList.contains('hidden');
+        
+        if (isOpen) {
+          content.classList.add('hidden');
+          icon.setAttribute('data-lucide', 'chevron-down');
+          item.classList.remove('border-indigo-500/30');
+          item.classList.add('border-slate-800/80');
+        } else {
+          content.classList.remove('hidden');
+          icon.setAttribute('data-lucide', 'chevron-up');
+          item.classList.remove('border-slate-800/80');
+          item.classList.add('border-indigo-500/30');
+        }
+        lucide.createIcons();
+      });
+    });
+  </script>
+</body>
+</html>
